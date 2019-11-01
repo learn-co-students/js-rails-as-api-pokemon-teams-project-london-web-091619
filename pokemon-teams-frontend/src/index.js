@@ -29,7 +29,6 @@ function injectTrainer(trainer) {
 }
 
 function injectPokemon(pokemon, ul) {
-  console.log(pokemon)
   const li = document.createElement("li")
   li.textContent = `${pokemon.nickname} (${pokemon.species})`
 
@@ -37,7 +36,19 @@ function injectPokemon(pokemon, ul) {
   button.textContent = "Release"
   button.classList.add("release")
   button.setAttribute("data-pokemon-id", pokemon.id)
+  button.addEventListener("click", e => releasePokemon(e))
 
   li.append(button)
   ul.append(li)
+}
+
+function releasePokemon(e) {
+  const pokemonId = e.target.dataset.pokemonId
+  const URI = POKEMONS_URL + "/" + pokemonId
+  const configObj = {
+    method: "DELETE"
+  }
+  fetch(URI, configObj).then(() => {
+    document.querySelector(`[data-pokemon-id="${pokemonId}"]`).parentElement.remove()
+  })
 }
