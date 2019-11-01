@@ -1,0 +1,3 @@
+[submodule "pokemon-teams-backend"]
+	path = pokemon-teams-backend
+	url = ./pokemon-teams-backend/
