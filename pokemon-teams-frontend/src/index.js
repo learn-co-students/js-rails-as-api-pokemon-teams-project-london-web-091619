@@ -17,12 +17,13 @@ function injectTrainer(trainer) {
   const p = document.createElement("p")
   p.textContent = trainer.name
 
+  const ul = document.createElement("ul")
+  trainer.pokemons.forEach(pokemon => injectPokemon(pokemon, ul))
+
   const button = document.createElement("button")
   button.setAttribute("data-trainer-id", trainer.id)
   button.textContent = "Add Pokemon"
-
-  const ul = document.createElement("ul")
-  trainer.pokemons.forEach(pokemon => injectPokemon(pokemon, ul))
+  button.addEventListener("click", () => addPokemon(trainer, ul))
 
   div.append(p, button, ul)
   document.querySelector("main").append(div)
@@ -40,6 +41,27 @@ function injectPokemon(pokemon, ul) {
 
   li.append(button)
   ul.append(li)
+}
+
+function addPokemon(trainer, ul) {
+  if (ul.children.length < 6) {
+    createPokemon(trainer)
+      .then(pokemon => injectPokemon(pokemon, ul))
+  }
+}
+
+function createPokemon(trainer) {
+  const configObj = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify({trainerId: trainer.id})
+  }
+
+  return fetch(POKEMONS_URL, configObj)
+    .then(response => response.json())
 }
 
 function releasePokemon(e) {
