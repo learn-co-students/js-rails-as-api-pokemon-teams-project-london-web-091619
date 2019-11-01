@@ -45,8 +45,7 @@ function injectPokemon(pokemon, ul) {
 
 function addPokemon(trainer, ul) {
   if (ul.children.length < 6) {
-    createPokemon(trainer)
-      .then(pokemon => injectPokemon(pokemon, ul))
+    createPokemon(trainer).then(pokemon => injectPokemon(pokemon, ul))
   }
 }
 
@@ -57,20 +56,17 @@ function createPokemon(trainer) {
       "Content-Type": "application/json",
       "Accept": "application/json"
     },
-    body: JSON.stringify({trainerId: trainer.id})
+    body: JSON.stringify({ trainerId: trainer.id })
   }
 
-  return fetch(POKEMONS_URL, configObj)
-    .then(response => response.json())
+  return fetch(POKEMONS_URL, configObj).then(response => response.json())
 }
 
 function releasePokemon(e) {
   const pokemonId = e.target.dataset.pokemonId
   const URI = POKEMONS_URL + "/" + pokemonId
-  const configObj = {
-    method: "DELETE"
-  }
-  fetch(URI, configObj).then(() => {
-    document.querySelector(`[data-pokemon-id="${pokemonId}"]`).parentElement.remove()
+  fetch(URI, { method: "DELETE" }).then(() => {
+    document.querySelector(`[data-pokemon-id="${pokemonId}"]`)
+      .parentElement.remove()
   })
 }
